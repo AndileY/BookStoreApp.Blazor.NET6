@@ -1,3 +1,4 @@
+using BookStoreAppApI.Configurations;
 using BookStoreAppApI.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -24,6 +25,8 @@ builder.Services.AddCors(options =>
     b => b.AllowAnyMethod()
     .AllowAnyHeader().AllowAnyOrigin());
 });
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 
 var app = builder.Build();
