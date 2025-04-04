@@ -1,5 +1,6 @@
 using BookStoreAppApI.Configurations;
 using BookStoreAppApI.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -26,7 +27,18 @@ builder.Services.AddCors(options =>
     .AllowAnyHeader().AllowAnyOrigin());
 });
 
-builder.Services.AddAutoMapper(typeof(MapperConfig));
+//builder.Services.AddAutoMapper(typeof(MapperConfig));
+//builder.Services.AddIdentityCore<IdentityUser>()
+//    .AddRoles<IdentityUser>()
+//    .AddEntityFrameworkStores<BookStoreAppDboContext>();
+
+// Register ASP.NET Core Identity (with roles)
+builder.Services.AddIdentity<ApiUser, IdentityRole>()
+    .AddEntityFrameworkStores<BookStoreAppDboContext>()
+    .AddDefaultTokenProviders();
+
+// Register AutoMapper and specify the assembly that contains the MapperConfig class
+builder.Services.AddAutoMapper(typeof(MapperConfig).Assembly);
 
 
 var app = builder.Build();
