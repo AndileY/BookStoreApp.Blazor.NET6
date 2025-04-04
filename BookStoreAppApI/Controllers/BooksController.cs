@@ -9,6 +9,7 @@ using BookStoreAppApI.Data;
 using AutoMapper;
 using BookStoreAppApI.Models.Book;
 using BookStoreAppApI.Models.Author;
+using AutoMapper.QueryableExtensions;
 
 namespace BookStoreAppApI.Controllers
 {
@@ -29,8 +30,11 @@ namespace BookStoreAppApI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookReadOnlyDto>>> GetBooks()
         {
-            var book = await _context.Books.ToListAsync();
-            var bookDtos = mapper.Map<IEnumerable<BookReadOnlyDto>>(book);
+            var bookDtos = await _context.Books
+                .Include(q => q.Author)
+                .ProjectTo<BookReadOnlyDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            //var bookDtos = mapper.Map<IEnumerable<BookReadOnlyDto>>(book);
 
             if (_context.Books == null)
           {
@@ -41,33 +45,46 @@ namespace BookStoreAppApI.Controllers
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookReadOnlyDto>> GetBook(int id)
+        public async Task<ActionResult<BookDetailsDto>> GetBook(int id)
         {
-          if (_context.Books == null)
-          {
+            var book = await _context.Books
+               .Include(q => q.Author)
+               .ProjectTo<BookDetailsDto>(mapper.ConfigurationProvider)
+               .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (_context.Books == null)
+            {
               return NotFound();
-          }
-            var book = await _context.Books.FindAsync(id);
+            }
+            
 
             if (book == null)
             {
                 return NotFound();
             }
-            var bookDtos = mapper.Map<AuthorReadOnyDto>(book);
+         
 
-            return Ok(bookDtos);
+            return book;
         }
 
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(int id, Book book)
+        public async Task<IActionResult> PutBook(int id, BookUpdateDto bookDto)
         {
-            if (id != book.Id)
+            if (id != bookDto.Id)
             {
                 return BadRequest();
             }
+            var book = await _context.Books.FindAsync(id);
+            
+            if(book == null)
+            {
+                return NotFound();
 
+            }
+
+            mapper.Map(bookDto, book);
             _context.Entry(book).State = EntityState.Modified;
 
             try
@@ -92,16 +109,38 @@ namespace BookStoreAppApI.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Book>> PostBook(Book book)
+        public async Task<ActionResult<BookCreateDto>> PostBook(BookCreateDto bookDto)
         {
+            var book = mapper.Map<Book>(bookDto);
           if (_context.Books == null)
           {
               return Problem("Entity set 'BookStoreAppDboContext.Books'  is null.");
           }
+
+            // Check if the Author exists, if not, create a new one
+            if (book.AuthorId.HasValue)
+            {
+                var author = await _context.Authors.FindAsync(book.AuthorId.Value);
+                if (author != null)
+                {
+                    book.Author = author;  // Associate the existing author
+                }
+                else
+                {
+                    return BadRequest("Author not found");
+                }
+            }
+            else
+            {
+                // You can handle creating a new Author if needed
+                return BadRequest("AuthorId must be provided.");
+            }
+
+
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBook", new { id = book.Id }, book);
+            return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
         }
 
         // DELETE: api/Books/5
