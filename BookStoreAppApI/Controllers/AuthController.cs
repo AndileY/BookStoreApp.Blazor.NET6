@@ -41,8 +41,10 @@ namespace BookStoreAppApI.Controllers
         {
             try
             {
+
                 var user = mapper.Map<ApiUser>(userDto);
                 user.UserName = userDto.Email;
+
                 var result = await userManager.CreateAsync(user, userDto.Password);
                 if (result.Succeeded == false)
                 {
@@ -53,24 +55,33 @@ namespace BookStoreAppApI.Controllers
                     }
                     return BadRequest(ModelState);
                 }
+                // Generate the confirmation token
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+
+
+
 
                 await userManager.AddToRoleAsync(user, "User");
 
                 return Accepted();
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, $"Something went wrong in the{nameof(Register)}");
-                return Problem($"Something went wrong in the{nameof(Register)}", statusCode:500);
+                return Problem($"Something went wrong in the{nameof(Register)}", statusCode: 500);
             }
-         
-            
+
+
         }
+
+
+
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginUserDto userDto)
+        public async Task<ActionResult<AuthResponse>> Login(LoginUserDto userDto)
         {
             logger.LogInformation($"Login Attempt for{userDto.Email}");
             try
@@ -78,34 +89,44 @@ namespace BookStoreAppApI.Controllers
                 var user = await userManager.FindByEmailAsync(userDto.Email);
                 var passwordValid = await userManager.CheckPasswordAsync(user, userDto.Password);
 
-                if(user == null || passwordValid == false)
+                if (user == null || passwordValid == false)
                 {
                     return Unauthorized(userDto);
                 }
+
+
+
+
                 string tokenString = await GenerateToken(user);
-                var response = new AuthResponse {
+                var response = new AuthResponse
+                {
                     Email = userDto.Email,
                     Token = tokenString,
                     UserId = user.Id
-                
+
                 };
 
                 return Ok(response);
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, $"Something went wrong in the{nameof(Login)}");
                 return Problem($"Something went wrong in the{nameof(Login)}", statusCode: 500);
 
             }
-            
+
         }
+
+
+
+
+
 
         private async Task<string> GenerateToken(ApiUser user)
         {
-           
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -114,12 +135,12 @@ namespace BookStoreAppApI.Controllers
             var userClaims = await userManager.GetClaimsAsync(user);
 
             var claims = new List<Claim>
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(CustomClaimTypes.Uid, user.Id)
-                }
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                        new Claim(CustomClaimTypes.Uid, user.Id)
+                    }
             .Union(userClaims)
             .Union(roleClaims);
 

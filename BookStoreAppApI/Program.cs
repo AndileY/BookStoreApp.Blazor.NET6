@@ -30,12 +30,12 @@ builder.Services.AddCors(options =>
     .AllowAnyHeader().AllowAnyOrigin());
 });
 
-//builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 //builder.Services.AddIdentityCore<IdentityUser>()
 //    .AddRoles<IdentityUser>()
 //    .AddEntityFrameworkStores<BookStoreAppDboContext>();
 
-// Register ASP.NET Core Identity (with roles)
+//Register ASP.NET Core Identity (with roles)
 builder.Services.AddIdentity<ApiUser, IdentityRole>()
     .AddEntityFrameworkStores<BookStoreAppDboContext>()
     .AddDefaultTokenProviders();

@@ -16,7 +16,7 @@ namespace BookStoreAppApI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+  
     public class AuthorsController : ControllerBase
     {
         private readonly BookStoreAppDboContext _context;
