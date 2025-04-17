@@ -16,6 +16,7 @@ namespace BookStoreAppApI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     
     public class AuthController : ControllerBase
     {
@@ -86,8 +87,12 @@ namespace BookStoreAppApI.Controllers
             logger.LogInformation($"Login Attempt for{userDto.Email}");
             try
             {
+                var email = userDto.Email?.Trim();
+                var password = userDto.Password?.Trim();
+
                 var user = await userManager.FindByEmailAsync(userDto.Email);
                 var passwordValid = await userManager.CheckPasswordAsync(user, userDto.Password);
+
 
                 if (user == null || passwordValid == false)
                 {
@@ -96,11 +101,11 @@ namespace BookStoreAppApI.Controllers
 
 
 
-
+                
                 string tokenString = await GenerateToken(user);
                 var response = new AuthResponse
                 {
-                    Email = userDto.Email,
+                    Email = email,
                     Token = tokenString,
                     UserId = user.Id
 

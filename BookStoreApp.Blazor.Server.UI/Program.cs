@@ -1,6 +1,8 @@
 //using BookStoreApp.Blazor.Server.UI.Data;
 using Blazored.LocalStorage;
+using BookStoreApp.Blazor.Server.UI.Data.Configuration;
 using BookStoreApp.Blazor.Server.UI.Providers;
+using BookStoreApp.Blazor.Server.UI.Service;
 using BookStoreApp.Blazor.Server.UI.Service.Authentication;
 using BookStoreApp.Blazor.Server.UI.Service.Base;
 //using BookStoreApp.Blazor.Server.UI.Service.UI;
@@ -22,6 +24,9 @@ builder.Services.AddHttpClient<IClient, Client>(cl => cl.BaseAddress = new Uri (
 
 
 builder.Services.AddScoped<IAuthenticationService,  AuthenticationService>();
+// Register your custom service
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddScoped<ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(p
     => p.GetRequiredService<ApiAuthenticationStateProvider>());

@@ -11,19 +11,22 @@ using AutoMapper;
 using System.Collections;
 using BookStoreAppApI.Static;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper.QueryableExtensions;
+using BookStoreAppApI.Models.Book;
 
 namespace BookStoreAppApI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-  
+    [Authorize]
+
     public class AuthorsController : ControllerBase
     {
         private readonly BookStoreAppDboContext _context;
         private readonly IMapper mapper;
         private readonly ILogger<AuthorsController> logger;
 
-        public AuthorsController(BookStoreAppDboContext context, IMapper mapper, ILogger<AuthorsController>logger)
+        public AuthorsController(BookStoreAppDboContext context, IMapper mapper, ILogger<AuthorsController> logger)
         {
             _context = context;
             this.mapper = mapper;
@@ -59,51 +62,71 @@ namespace BookStoreAppApI.Controllers
                 return StatusCode(500, Message.Error500Message);
 
             }
-   
+
 
         }
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorReadOnyDto>> GetAuthor(int id)
+        public async Task<ActionResult<AuthorDetailsDto>> GetAuthor(int id)
         {
             try
             {
+
+                  var author = await _context.Authors
+                    .Include(q => q.Books)
+                    //.ProjectTo<AuthorDetailsDto>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(q => q.Id == id);
+
                 if (_context.Authors == null)
                 {
                     return NotFound();
                 }
-                var author = await _context.Authors.FindAsync(id);
+
+
 
                 if (author == null)
                 {
                     return NotFound();
                 }
+                var authorDto = new AuthorDetailsDto
+                {
+                    Id = author.Id,
+                    FirstName = author.FirstName?.Trim(),
+                    LastName = author.LastName?.Trim(),
+                    Bio = author.Bio?.Trim(),
+                    Books = author.Books.Select(b => new BookReadOnlyDto
+                    {
+                        Id = b.Id,
+                        Title = b.Title?.Trim(),
+                        Image = b.Image,
+                        Price = b.Price ?? 0,
+                        AuthorId = b.AuthorId ?? 0,
+                        AuthorName = $"{author.FirstName?.Trim()} {author.LastName?.Trim()}"
+                    }).ToList()
 
-                // Trim spaces from the first name, last name, and bio fields
-                author.FirstName = author.FirstName?.Trim();
-                author.LastName = author.LastName?.Trim();
-                author.Bio = author.Bio?.Trim();
 
-                var authorDtos = mapper.Map<AuthorReadOnyDto>(author);
+                };
 
 
-                return Ok(authorDtos);
+                return Ok(authorDto);
+
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, $"Error Perfoming GET in {nameof(GetAuthors)}");
                 return StatusCode(500, Message.Error500Message);
 
             }
 
-          
+
         }
 
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles ="Administrator")]
         public async Task<IActionResult> PutAuthor(int id, AuthorUpdateDto authorDto)
         {
             if (id != authorDto.Id)
@@ -147,6 +170,7 @@ namespace BookStoreAppApI.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         //public async Task<ActionResult<Author>> PostAuthor(Author author)
         //{
         //  if (_context.Authors == null)
@@ -204,6 +228,7 @@ namespace BookStoreAppApI.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             try

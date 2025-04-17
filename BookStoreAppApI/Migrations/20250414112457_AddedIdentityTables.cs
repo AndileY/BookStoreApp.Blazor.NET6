@@ -183,15 +183,15 @@ namespace BookStoreAppApI.Migrations
             //        Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
             //        AuthorId = table.Column<int>(type: "int", nullable: true)
             //    },
-                //constraints: table =>
-                //{
-                //    table.PrimaryKey("PK_Books", x => x.Id);
-                //    table.ForeignKey(
-                //        name: "FK_Books_ToTable",
-                //        column: x => x.AuthorId,
-                //        principalTable: "Authors",
-                //        principalColumn: "Id");
-                //});
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Books", x => x.Id);
+            //        table.ForeignKey(
+            //            name: "FK_Books_ToTable",
+            //            column: x => x.AuthorId,
+            //            principalTable: "Authors",
+            //            principalColumn: "Id");
+            //    });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

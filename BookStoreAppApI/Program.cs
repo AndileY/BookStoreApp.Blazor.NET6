@@ -1,4 +1,4 @@
-using BookStoreAppApI.Configurations;
+﻿using BookStoreAppApI.Configurations;
 using BookStoreAppApI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -31,14 +31,13 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
-//builder.Services.AddIdentityCore<IdentityUser>()
-//    .AddRoles<IdentityUser>()
-//    .AddEntityFrameworkStores<BookStoreAppDboContext>();
 
-//Register ASP.NET Core Identity (with roles)
-builder.Services.AddIdentity<ApiUser, IdentityRole>()
-    .AddEntityFrameworkStores<BookStoreAppDboContext>()
-    .AddDefaultTokenProviders();
+
+builder.Services.AddIdentityCore<ApiUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<BookStoreAppDboContext>();
+
+
 
 // Register AutoMapper and specify the assembly that contains the MapperConfig class
 builder.Services.AddAutoMapper(typeof(MapperConfig).Assembly);

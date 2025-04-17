@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreAppApI.Migrations
 {
     [DbContext(typeof(BookStoreAppDboContext))]
-    [Migration("20250404115343_SeededDefaultUserandRoles")]
-    partial class SeededDefaultUserandRoles
+    [Migration("20250414112814_ExtendedUserTable")]
+    partial class ExtendedUserTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,44 +95,6 @@ namespace BookStoreAppApI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "2c6bc221-9937-49ce-99ed-293051f4f106",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "e14fe9fb-5992-4b20-b68c-78d4bef62833",
-                            Email = "admin@bookstore.com",
-                            EmailConfirmed = false,
-                            FirstName = "System",
-                            LastName = "Admin",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@BOOKSTORE.COM",
-                            NormalizedUserName = "ADMIN@BOOKSTORE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECtiMM2pF+g+rn4ni5bXz9lf2Ga9o3CZznKFe+RAYTKcU2iv2j61S0wmRZO2F3YRPw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "c4fb58b3-bbd0-45cb-b168-ab226a9843f9",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@bookstore.com"
-                        },
-                        new
-                        {
-                            Id = "ee9f8614-dc40-463b-a450-be6bc5fd6914",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "b7978bdc-c28a-4764-8a09-4dd8d431b45c",
-                            Email = "user@bookstore.com",
-                            EmailConfirmed = false,
-                            FirstName = "System",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER@BOOKSTORE.COM",
-                            NormalizedUserName = "USER@BOOKSTORE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHtXkvDe2l66HmEo0SyMBk/7yb0B+2PUsoW0kPuo+6OMAUOOCPsehnG9vx++yjZaoQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "bcc42182-eb35-4c83-90de-a8bcf2c50333",
-                            TwoFactorEnabled = false,
-                            UserName = "user@bookstore.com"
-                        });
                 });
 
             modelBuilder.Entity("BookStoreAppApI.Data.Author", b =>
@@ -237,22 +199,6 @@ namespace BookStoreAppApI.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a123e426-b5e6-4664-a7a7-5564c344f15e",
-                            ConcurrencyStamp = "5f6060ef-596d-4fd1-a05b-ed3062b68462",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "0284a2b8-98ee-4608-9dd2-1376b009888e",
-                            ConcurrencyStamp = "da5370d7-b870-4020-b5ef-d2583ffa18ba",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -340,18 +286,6 @@ namespace BookStoreAppApI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "ee9f8614-dc40-463b-a450-be6bc5fd6914",
-                            RoleId = "a123e426-b5e6-4664-a7a7-5564c344f15e"
-                        },
-                        new
-                        {
-                            UserId = "2c6bc221-9937-49ce-99ed-293051f4f106",
-                            RoleId = "0284a2b8-98ee-4608-9dd2-1376b009888e"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

@@ -37,9 +37,12 @@ namespace BookStoreAppApI.Controllers
             //var bookDtos = mapper.Map<IEnumerable<BookReadOnlyDto>>(book);
 
             if (_context.Books == null)
-          {
-              return NotFound();
-          }
+            {
+                return NotFound();
+            }
+           
+
+
             return Ok(bookDtos);
         }
 

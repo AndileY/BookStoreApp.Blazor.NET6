@@ -65,7 +65,7 @@
 <App />
  *@
 
-@using Microsoft.AspNetCore.Components.Authorization
+@* @using Microsoft.AspNetCore.Components.Authorization
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
@@ -91,4 +91,33 @@
             </LayoutView>
         </NotFound>
     </Router>
+</CascadingAuthenticationState> *@
+
+@using Microsoft.AspNetCore.Components.Authorization
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <div class="alert alert-danger m-4">
+                        <h4>You are not authorized to access this page.</h4>
+                        <p>Please <a href="/user/login">log in</a> with appropriate credentials.</p>
+                    </div>
+                </NotAuthorized>
+                <Authorizing>
+                    <div class="alert alert-info m-4">
+                        Authorizing...
+                    </div>
+                </Authorizing>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
 </CascadingAuthenticationState>
+

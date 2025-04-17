@@ -13,8 +13,8 @@ namespace BookStoreAppApI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0284a2b8-98ee-4608-9dd2-1376b009888e", "da5370d7-b870-4020-b5ef-d2583ffa18ba", "Administrator", "ADMINISTRATOR" },
-                    { "a123e426-b5e6-4664-a7a7-5564c344f15e", "5f6060ef-596d-4fd1-a05b-ed3062b68462", "User", "USER" }
+                    { "0284a2b8-98ee-4608-9dd2-1376b009888e", "bdad9a9f-2b3a-409c-9e9e-4f4c9d6417c4", "Administrator", "ADMINISTRATOR" },
+                    { "a123e426-b5e6-4664-a7a7-5564c344f15e", "52a1f932-bcb4-40b3-bd6b-fc99861075c2", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -22,8 +22,8 @@ namespace BookStoreAppApI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "2c6bc221-9937-49ce-99ed-293051f4f106", 0, "e14fe9fb-5992-4b20-b68c-78d4bef62833", "admin@bookstore.com", false, "System", "Admin", false, null, "ADMIN@BOOKSTORE.COM", "ADMIN@BOOKSTORE.COM", "AQAAAAEAACcQAAAAECtiMM2pF+g+rn4ni5bXz9lf2Ga9o3CZznKFe+RAYTKcU2iv2j61S0wmRZO2F3YRPw==", null, false, "c4fb58b3-bbd0-45cb-b168-ab226a9843f9", false, "admin@bookstore.com" },
-                    { "ee9f8614-dc40-463b-a450-be6bc5fd6914", 0, "b7978bdc-c28a-4764-8a09-4dd8d431b45c", "user@bookstore.com", false, "System", "User", false, null, "USER@BOOKSTORE.COM", "USER@BOOKSTORE.COM", "AQAAAAEAACcQAAAAEHtXkvDe2l66HmEo0SyMBk/7yb0B+2PUsoW0kPuo+6OMAUOOCPsehnG9vx++yjZaoQ==", null, false, "bcc42182-eb35-4c83-90de-a8bcf2c50333", false, "user@bookstore.com" }
+                    { "2c6bc221-9937-49ce-99ed-293051f4f106", 0, "537bcb99-d2a9-42ad-87db-a7d64bfd9d56", "admin@bookstore.com", false, "System", "Admin", false, null, "ADMIN@BOOKSTORE.COM", "ADMIN@BOOKSTORE.COM", "AQAAAAEAACcQAAAAEAmP0ReT74unNC30Jc68X5QVse5IBBZG8EXLXhokeDriChyT3lSGz70Q8BGvh2Ly0A==", null, false, "630f0456-70a9-4cd1-a593-92d66af01136", false, "admin@bookstore.com" },
+                    { "ee9f8614-dc40-463b-a450-be6bc5fd6914", 0, "83bb3876-0d2e-41ea-8e6e-dc7d93155831", "user@bookstore.com", false, "System", "User", false, null, "USER@BOOKSTORE.COM", "USER@BOOKSTORE.COM", "AQAAAAEAACcQAAAAENA9gYPrn6KjAvAinOxO3lEytQiCfM7w1bGkuKqCp6BcyBj8md+ZvWNzppqmSNx5tQ==", null, false, "c0d0733d-bbd8-47c4-9423-ea1509855dc3", false, "user@bookstore.com" }
                 });
 
             migrationBuilder.InsertData(

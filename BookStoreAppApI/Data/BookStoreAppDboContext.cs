@@ -102,7 +102,7 @@ namespace BookStoreAppApI.Data
                     NormalizedEmail = "ADMIN@BOOKSTORE.COM",
                     UserName = "admin@bookstore.com",
                     NormalizedUserName = "ADMIN@BOOKSTORE.COM",
-                    FirstName ="System",
+                    FirstName = "System",
                     LastName = "Admin",
                     PasswordHash = hasher.HashPassword(null, "P@ssword1")
                 },
@@ -115,9 +115,11 @@ namespace BookStoreAppApI.Data
                      NormalizedUserName = "USER@BOOKSTORE.COM",
                      FirstName = "System",
                      LastName = "User",
+
                      PasswordHash = hasher.HashPassword(null, "P@ssword1")
+
                  }
-                );
+                ); ;
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {
