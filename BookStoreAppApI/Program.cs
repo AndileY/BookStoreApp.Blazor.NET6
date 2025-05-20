@@ -1,4 +1,5 @@
-﻿using BookStoreAppApI.Configurations;
+﻿using AutoMapper.Internal;
+using BookStoreAppApI.Configurations;
 using BookStoreAppApI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +19,14 @@ builder.Services.AddDbContext<BookStoreAppDboContext>(options => options.UseSqlS
 
 
 //builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.WriteIndented = true; 
+        });
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -41,6 +50,14 @@ builder.Services.AddIdentityCore<ApiUser>()
 
 // Register AutoMapper and specify the assembly that contains the MapperConfig class
 builder.Services.AddAutoMapper(typeof(MapperConfig).Assembly);
+
+
+//builder.Services.AddAutoMapper(cfg =>
+//{
+//    cfg.Internal().MethodMappingEnabled = false;
+//}, typeof(MapperConfig).Assembly);
+
+
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -74,6 +91,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseCors("AllowAll");
 

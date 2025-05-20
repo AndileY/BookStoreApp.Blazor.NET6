@@ -23,7 +23,7 @@ namespace BookStoreApp.Blazor.Server.UI.Providers
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity());
-            // Prevent JS interop during prerendering
+            //This protects against calling JS (like localStorage) during server-side prerendering, which would crash otherwise.
             if (jsRuntime is IJSInProcessRuntime == false)
             {
                 return new AuthenticationState(user);
@@ -50,9 +50,7 @@ namespace BookStoreApp.Blazor.Server.UI.Providers
 
         public async Task LoggedIn()
         {
-            //var savedToken = await localStorageService.GetItemAsync<string>("accessToken");
-            //var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(savedToken);
-            //var claims = tokenContent.Claims;
+            
             var claims = await GetClaims();
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
             var authState = Task.FromResult(new AuthenticationState(user));
@@ -62,7 +60,7 @@ namespace BookStoreApp.Blazor.Server.UI.Providers
         }
         public async Task  LoggedOut()
         {
-            //await localStorage.RemoveItemsAsync("accessToken");
+        
             await localStorage.RemoveItemAsync("accessToken");
             var nobody = new ClaimsPrincipal(new ClaimsIdentity());
             var authState = Task.FromResult(new AuthenticationState(nobody));

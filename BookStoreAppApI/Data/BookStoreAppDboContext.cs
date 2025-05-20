@@ -55,7 +55,7 @@ namespace BookStoreAppApI.Data
                     .IsUnique();
 
                 entity.Property(e => e.Image)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsFixedLength();
 
                 entity.Property(e => e.Isbn)
@@ -76,6 +76,7 @@ namespace BookStoreAppApI.Data
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.AuthorId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Books_ToTable");
             });
 

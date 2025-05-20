@@ -53,7 +53,7 @@ namespace BookStoreApp.Blazor.Server.UI.Service
 
         }
 
-        public async Task<Response<int>> EditAuthor(int id,AuthorUpdateDto author)
+        public async Task<Response<int>> Edit(int id,AuthorUpdateDto author)
         {
             Response<int> response = new();
             try
@@ -69,9 +69,7 @@ namespace BookStoreApp.Blazor.Server.UI.Service
             return response;
         }
 
-     
-
-        public async Task<Response<AuthorDetailsDto>> Get(int id)
+        public async Task<Response<AuthorDetailsDto>> GetAuthor(int id)
         {
             Response<AuthorDetailsDto> response;
             try
@@ -102,12 +100,12 @@ namespace BookStoreApp.Blazor.Server.UI.Service
                 var data = await client.AuthorsAllAsync();
                 response = new Response<List<AuthorReadOnyDto>>
                 {
-                    Data = data.ToList(), 
+                    Data = data.ToList(),
                     Success = true
                 };
 
             }
-            catch(ApiException exception)
+            catch (ApiException exception)
             {
                 response = ConvertApiExceptions<List<AuthorReadOnyDto>>(exception);
             }
@@ -124,7 +122,7 @@ namespace BookStoreApp.Blazor.Server.UI.Service
                 var data = await client.AuthorsGETAsync(id);
                 response = new Response<AuthorUpdateDto>
                 {
-                    Data = mapper.Map < AuthorUpdateDto > (data),
+                    Data = mapper.Map<AuthorUpdateDto>(data),
                     Success = true
                 };
 
@@ -137,4 +135,72 @@ namespace BookStoreApp.Blazor.Server.UI.Service
             return response;
         }
     }
-}
+
+    //public async Task<Response<AuthorDetailsDto>> Get(int id)
+    //{
+    //    Response<AuthorDetailsDto> response;
+    //    try
+    //    {
+    //        await GetBearerToken();
+    //        var data = await client.AuthorsGETAsync(id);
+    //        response = new Response<AuthorDetailsDto>
+    //        {
+    //            Data = data,
+    //            Success = true
+    //        };
+
+    //    }
+    //    catch (ApiException exception)
+    //    {
+    //        response = ConvertApiExceptions<AuthorDetailsDto>(exception);
+    //    }
+
+    //    return response;
+    }
+
+    //public async Task<Response<List<AuthorReadOnyDto>>> Get()
+    //{
+    //    Response<List<AuthorReadOnyDto>> response;
+    //    try
+    //    {
+    //        await GetBearerToken();
+    //        var data = await client.AuthorsAllAsync();
+    //        response = new Response<List<AuthorReadOnyDto>>
+    //        {
+    //            Data = data.ToList(), 
+    //            Success = true
+    //        };
+
+    //    }
+    //    catch(ApiException exception)
+    //    {
+    //        response = ConvertApiExceptions<List<AuthorReadOnyDto>>(exception);
+    //    }
+
+    //    return response;
+    //}
+
+    //public async Task<Response<AuthorUpdateDto>> GetForUpdateAuthor(int id)
+    //{
+    //    Response<AuthorUpdateDto> response;
+    //    try
+    //    {
+    //        await GetBearerToken();
+    //        var data = await client.AuthorsGETAsync(id);
+    //        response = new Response<AuthorUpdateDto>
+    //        {
+    //            Data = mapper.Map<AuthorUpdateDto>(data),
+    //            Success = true
+    //        };
+
+    //    }
+    //    catch (ApiException exception)
+    //    {
+    //        response = ConvertApiExceptions<AuthorUpdateDto>(exception);
+    //    }
+
+    //    return response;
+    //}
+
+
+

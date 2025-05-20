@@ -59,10 +59,6 @@ namespace BookStoreAppApI.Controllers
                 // Generate the confirmation token
                 var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
-
-
-
-
                 await userManager.AddToRoleAsync(user, "User");
 
                 return Accepted();

@@ -28,11 +28,13 @@
     <PackageReference Include="Serilog.Expressions" Version="3.2.1" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\bookcoverimages\" />
   </ItemGroup>
 
 </Project>

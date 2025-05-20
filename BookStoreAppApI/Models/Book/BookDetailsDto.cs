@@ -4,10 +4,10 @@ namespace BookStoreAppApI.Models.Book
 {
     public class BookDetailsDto : BaseDto
     {
-       
+
         public string Title { get; set; }
 
-    
+
         public int Year { get; set; }
 
  
@@ -18,12 +18,12 @@ namespace BookStoreAppApI.Models.Book
 
         public string Image { get; set; }
 
-        
-        public decimal Price { get; set; }
+
+        public double Price { get; set; }
 
         public int AuthorId { get; set; }
 
-        public string AuthorName { get; set; } 
+        public string AuthorName { get; set; }
 
 
 

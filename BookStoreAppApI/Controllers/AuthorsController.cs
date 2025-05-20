@@ -35,7 +35,7 @@ namespace BookStoreAppApI.Controllers
 
         // GET: api/Authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorReadOnyDto>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<AuthorReadOnyDto>>> Get()
         {
             try
             {
@@ -58,7 +58,7 @@ namespace BookStoreAppApI.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Error Perfoming GET in {nameof(GetAuthors)}");
+                logger.LogError(ex, $"Error Perfoming GET in {nameof(Get)}");
                 return StatusCode(500, Message.Error500Message);
 
             }
@@ -73,13 +73,14 @@ namespace BookStoreAppApI.Controllers
             try
             {
 
-                  var author = await _context.Authors
-                    .Include(q => q.Books)
-                    //.ProjectTo<AuthorDetailsDto>(mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(q => q.Id == id);
+                var author = await _context.Authors
+                  .Include(q => q.Books)
+                  //.ProjectTo<AuthorDetailsDto>(mapper.ConfigurationProvider)
+                  .FirstOrDefaultAsync(q => q.Id == id);
 
                 if (_context.Authors == null)
                 {
+                    logger.LogError($"Error Perfoming GET in {nameof(GetAuthor)}");
                     return NotFound();
                 }
 
@@ -100,7 +101,8 @@ namespace BookStoreAppApI.Controllers
                         Id = b.Id,
                         Title = b.Title?.Trim(),
                         Image = b.Image,
-                        Price = b.Price ?? 0,
+                        Price = (double)(b.Price ?? 0),
+
                         AuthorId = b.AuthorId ?? 0,
                         AuthorName = $"{author.FirstName?.Trim()} {author.LastName?.Trim()}"
                     }).ToList()
@@ -115,7 +117,7 @@ namespace BookStoreAppApI.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Error Perfoming GET in {nameof(GetAuthors)}");
+                logger.LogError(ex, $"Error Perfoming GET in {nameof(GetAuthor)}");
                 return StatusCode(500, Message.Error500Message);
 
             }
@@ -169,8 +171,8 @@ namespace BookStoreAppApI.Controllers
 
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        //[HttpPost]
+        //[Authorize(Roles = "Administrator")]
         //public async Task<ActionResult<Author>> PostAuthor(Author author)
         //{
         //  if (_context.Authors == null)
@@ -189,17 +191,14 @@ namespace BookStoreAppApI.Controllers
 
         //    return CreatedAtAction("GetAuthor", new { id = author.Id }, author);
         //}
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<AuthorCreateDto>> PostAuthor(AuthorCreateDto authorDto)
         {
             try
             {
                 var author = mapper.Map<Author>(authorDto);
-                //var author = new Author
-                //{
-                //    Bio = authorDto.Bio,
-                //    FirstName = authorDto.FirstName,
-                //    LastName = authorDto.LastName
-                //};
+          
                 if (_context.Authors == null)
                 {
                     return Problem("Entity set 'BookStoreAppDboContext.Authors'  is null.");
@@ -231,12 +230,46 @@ namespace BookStoreAppApI.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
+            //try
+            //{
+            //    if (_context.Authors == null)
+            //    {
+            //        return NotFound();
+            //    }
+            //    var author = await _context.Authors.FindAsync(id);
+            //    if (author == null)
+            //    {
+            //        return NotFound();
+            //    }
+            //    // Check for books before deleting
+            //    bool hasBooks = await _context.Books.AnyAsync(b => b.AuthorId == id);
+            //    if (hasBooks)
+            //    {
+            //        return BadRequest("Cannot delete author. This author has associated books.");
+            //    }
+
+
+
+
+            //    //_context.Authors.Remove(author);
+            //    //await _context.SaveChangesAsync();
+
+            //    return NoContent();
+
+            //}
+            //catch(Exception ex)
+            //{
+            //    logger.LogError(ex, $"Error Perfoming DELETE in {nameof(PostAuthor)}");
+            //    return StatusCode(500, Message.Error500Message);
+
+            //}
             try
             {
                 if (_context.Authors == null)
                 {
                     return NotFound();
                 }
+
                 var author = await _context.Authors.FindAsync(id);
                 if (author == null)
                 {
@@ -247,15 +280,13 @@ namespace BookStoreAppApI.Controllers
                 await _context.SaveChangesAsync();
 
                 return NoContent();
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                logger.LogError(ex, $"Error Perfoming DELETE in {nameof(PostAuthor)}");
+                logger.LogError(ex, $"Error performing DELETE in {nameof(DeleteAuthor)}");
                 return StatusCode(500, Message.Error500Message);
-
             }
-           
+
         }
 
         private bool AuthorExists(int id)
