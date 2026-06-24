@@ -206,8 +206,6 @@ dotnet run
 
 <img width="1569" height="630" alt="Blazor Server - Book details and management interface" src="https://github.com/user-attachments/assets/76f63a39-8600-42a6-b65e-742f38f52116" />
 
-*Blazor WASM - Login page with JWT authentication*
-
 <img width="691" height="808" alt="Blazor WASM - Login page with JWT authentication" src="https://github.com/user-attachments/assets/a0de017d-89b1-41eb-8cf4-e19188f4073c" />
 
 ### Swagger API Documentation
